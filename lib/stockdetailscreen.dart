@@ -18,6 +18,7 @@ class _StockDetailState extends State<StockDetail> {
   String HighPrice="LOADING...";
   String LowPrice="LOADING...";
   String ClosePrice="LOADING...";
+  String Predicted="PREDICTING...";
     void initState(){
     super.initState();
     getHttprequest(widget.symbol,widget.company);
@@ -40,6 +41,15 @@ class _StockDetailState extends State<StockDetail> {
 
      });
     }
+   String url2="http://ec2-13-233-130-174.ap-south-1.compute.amazonaws.com:8080/predict/"+symbolName+".BSE";
+   var response2= await http.get(Uri.parse(url2));
+   if(response2.statusCode==200)
+   {
+     Map<String,dynamic>map = jsonDecode(response2.body);
+     Predicted=map["prediction"];
+     setState(() {
+     });
+   }
   }
   Widget build(BuildContext context)
   {
@@ -76,6 +86,9 @@ class _StockDetailState extends State<StockDetail> {
                   SizedBox(height: 10,),
                   Text("CLOSE PRICE: ",style: TextStyle(fontSize: 21,fontWeight:FontWeight.bold)),
                   Text(ClosePrice,style: TextStyle(fontSize: 21,fontWeight:FontWeight.bold)),
+                  SizedBox(height: 10,),
+                  Text("PREDICTED CLOSE PRICE: ",style: TextStyle(fontSize: 21,fontWeight:FontWeight.bold)),
+                  Text(Predicted,style: TextStyle(fontSize: 21,fontWeight:FontWeight.bold)),
                 ]
               ),
             )
